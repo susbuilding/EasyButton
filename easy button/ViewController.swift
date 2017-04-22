@@ -75,7 +75,7 @@ class ViewController: UIViewController {
         
         let session = URLSession.shared
         var request = URLRequest(url: url)
-        let jsonData = try? JSONSerialization.data(withJSONObject: ["on":true,"sat":254,"bri":254,"hue":30000])
+        let jsonData = try? JSONSerialization.data(withJSONObject: ["on":true,"sat":254,"bri":254,"hue":60000])
         request.httpMethod = Method.put.rawValue
         request.httpBody = jsonData
         
@@ -118,17 +118,17 @@ class ViewController: UIViewController {
     }
     
     @IBOutlet weak var Helloworldlabel: UILabel!
-
     @IBOutlet weak var button: UIButton!
+    @IBOutlet weak var OffButton: UIButton!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
         
-        Helloworldlabel.text = "Simple Lights"
-        button.setTitle("Turn on Light", for: .normal)
+        Helloworldlabel.text = "Lights"
+        button.setTitle("Lumos", for: .normal)
     }
-
+    
     @IBAction func didTapButton(_ sender: Any) {
         print("ya clicked me!")
 //        getLights()
@@ -136,11 +136,13 @@ class ViewController: UIViewController {
         turnOnLightNumber(lightNumber:1)
         turnOnLightNumber(lightNumber:2)
         turnOnLightNumber(lightNumber:3)
+    }
+    
+    @IBAction func didTapOffButton(_ sender: Any) {
         turnOffLightNumber(lightNumber:1)
         turnOffLightNumber(lightNumber:2)
         turnOffLightNumber(lightNumber:3)
     }
-    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
