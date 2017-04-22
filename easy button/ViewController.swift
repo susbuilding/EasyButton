@@ -19,16 +19,17 @@ class ViewController: UIViewController {
     private static let APIURL = "http://10.3.125.234/api/"
 //    get request
 //    private static let LightsEndPoint = "lights/"
-    private static let LightsEndPoint = "/lights/3/state"
+    private static let LightsEndPoint = "/lights/2/state"
     
     private func getLights() {
         guard let url = URL(string: ViewController.APIURL + ViewController.APIKey + ViewController.LightsEndPoint) else { return }
         
         let session = URLSession.shared
         var request = URLRequest(url: url)
-        let jsonData = try? JSONSerialization.data(withJSONObject: ["hue":20000])
+        let jsonData = try? JSONSerialization.data(withJSONObject: ["on":false,"sat":254, "bri":254,"hue":20000])
 //        request.httpMethod = Method.get.rawValue
         request.httpMethod = Method.put.rawValue
+//        this is for the put
         request.httpBody = jsonData
         
         let task = session.dataTask(with: request) { (data, response, error) in
@@ -50,7 +51,55 @@ class ViewController: UIViewController {
         
         let session = URLSession.shared
         var request = URLRequest(url: url)
-        let jsonData = try? JSONSerialization.data(withJSONObject: ["on":true])
+        let jsonData = try? JSONSerialization.data(withJSONObject: ["on":false,"sat":254,"bri":254,"hue":10000])
+        request.httpMethod = Method.put.rawValue
+        request.httpBody = jsonData
+        
+        let task = session.dataTask(with: request) { (data, response, error) in
+            
+            guard let data = data, error == nil else {
+                print("error was \(error)")
+                return
+            }
+            
+            let string = String(data: data, encoding: .utf8) ?? ""
+            print(string)
+        }
+        
+        task.resume()
+    }
+    
+    private func turnOnLightNumber(lightNumber: integer_t) {
+        let lightNum = "/lights/" + String(lightNumber) + "/state"
+        guard let url = URL(string: ViewController.APIURL + ViewController.APIKey + lightNum) else { return }
+        
+        let session = URLSession.shared
+        var request = URLRequest(url: url)
+        let jsonData = try? JSONSerialization.data(withJSONObject: ["on":true,"sat":254,"bri":254,"hue":30000])
+        request.httpMethod = Method.put.rawValue
+        request.httpBody = jsonData
+        
+        let task = session.dataTask(with: request) { (data, response, error) in
+            
+            guard let data = data, error == nil else {
+                print("error was \(error)")
+                return
+            }
+            
+            let string = String(data: data, encoding: .utf8) ?? ""
+            print(string)
+        }
+        
+        task.resume()
+    }
+    
+    private func turnOffLightNumber(lightNumber: integer_t) {
+        let lightNum = "/lights/" + String(lightNumber) + "/state"
+        guard let url = URL(string: ViewController.APIURL + ViewController.APIKey + lightNum) else { return }
+        
+        let session = URLSession.shared
+        var request = URLRequest(url: url)
+        let jsonData = try? JSONSerialization.data(withJSONObject: ["on":false])
         request.httpMethod = Method.put.rawValue
         request.httpBody = jsonData
         
@@ -83,7 +132,13 @@ class ViewController: UIViewController {
     @IBAction func didTapButton(_ sender: Any) {
         print("ya clicked me!")
 //        getLights()
-        turnOnLight()
+//        turnOnLight()
+        turnOnLightNumber(lightNumber:1)
+        turnOnLightNumber(lightNumber:2)
+        turnOnLightNumber(lightNumber:3)
+        turnOffLightNumber(lightNumber:1)
+        turnOffLightNumber(lightNumber:2)
+        turnOffLightNumber(lightNumber:3)
     }
     
     override func didReceiveMemoryWarning() {
