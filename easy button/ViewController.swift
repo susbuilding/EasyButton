@@ -46,29 +46,6 @@ class ViewController: UIViewController {
         task.resume()
     }
     
-    private func turnOnLight() {
-        guard let url = URL(string: ViewController.APIURL + ViewController.APIKey + ViewController.LightsEndPoint) else { return }
-        
-        let session = URLSession.shared
-        var request = URLRequest(url: url)
-        let jsonData = try? JSONSerialization.data(withJSONObject: ["on":false,"sat":254,"bri":254,"hue":10000])
-        request.httpMethod = Method.put.rawValue
-        request.httpBody = jsonData
-        
-        let task = session.dataTask(with: request) { (data, response, error) in
-            
-            guard let data = data, error == nil else {
-                print("error was \(error)")
-                return
-            }
-            
-            let string = String(data: data, encoding: .utf8) ?? ""
-            print(string)
-        }
-        
-        task.resume()
-    }
-    
     private func turnOnLightNumber(lightNumber: integer_t) {
         let lightNum = "/lights/" + String(lightNumber) + "/state"
         guard let url = URL(string: ViewController.APIURL + ViewController.APIKey + lightNum) else { return }
@@ -132,7 +109,6 @@ class ViewController: UIViewController {
     @IBAction func didTapButton(_ sender: Any) {
         print("ya clicked me!")
 //        getLights()
-//        turnOnLight()
         turnOnLightNumber(lightNumber:1)
         turnOnLightNumber(lightNumber:2)
         turnOnLightNumber(lightNumber:3)
